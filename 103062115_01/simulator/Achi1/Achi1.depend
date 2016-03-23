@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1458648353 source:d:\ŒvŒ‹\archi2016_project1\103062115_01\simulator\achi1\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"instruction.h"
+
+1458622105 d:\ŒvŒ‹\archi2016_project1\103062115_01\simulator\achi1\register.h
+	<stdio.h>
+
+1458648226 d:\ŒvŒ‹\archi2016_project1\103062115_01\simulator\achi1\instruction.h
+	<stdio.h>
+	"register.h"
+
