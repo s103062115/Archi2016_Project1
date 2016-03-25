@@ -29,3 +29,4 @@
 #define ra 31
 
 unsigned int registers[32] = {0};
+

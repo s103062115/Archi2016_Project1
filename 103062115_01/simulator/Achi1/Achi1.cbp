@@ -31,6 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Dmemory.h" />
+		<Unit filename="Imemory.h" />
+		<Unit filename="error.h" />
 		<Unit filename="instruction.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
