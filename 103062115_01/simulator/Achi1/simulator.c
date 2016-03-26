@@ -80,17 +80,39 @@ int sign(unsigned int a){
     return a/(int)(Pow(2,31)+0.01);
 }
 int Add(int rs,int rt,int rd){
-    registers[rd] = registers[rs] + registers[rt];
-    if(sign(registers[rs]) == sign(registers[rt]) && sign(registers[rd]) != sign(registers[rs])){
+    if(registers[rs] + registers[rt] < registers[rs] || registers[rs] + registers[rt] < registers[rt]){
+        registers[rd] = registers[rs] + registers[rt];
         return -1;
     }
+    if((int)registers[rs] < 0 && (int)(registers[rs] + registers[rt]) >= (int)registers[rt]){
+        registers[rd] = registers[rs] + registers[rt];
+        return -1;
+    }
+    if((int)registers[rt] < 0 && (int)(registers[rs] + registers[rt]) >= (int)registers[rs]){
+        registers[rd] = registers[rs] + registers[rt];
+        return -1;
+    }
+    if(sign(registers[rs]) == sign(registers[rt]) && sign(registers[rs] + registers[rt]) != sign(registers[rs])){
+        registers[rd] = registers[rs] + registers[rt];
+        return -1;
+    }
+    registers[rd] = registers[rs] + registers[rt];
     return 1;
 }
 int Sub(int rs,int rt,int rd){
-    registers[rd] = registers[rs] - registers[rt];
-    if((sign(registers[rd])>0 && registers[rs] < registers[rt]) || (sign(registers[rd]<0 && registers[rs] > registers[rt]))){
+    if(registers[rs] - registers[rt] > registers[rs]){
+        registers[rd] = registers[rs] - registers[rt];
         return -1;
     }
+    if((int)registers[rt] > 0 && (int)(registers[rs] - registers[rt]) >= (int)registers[rs]){
+        registers[rd] = registers[rs] - registers[rt];
+        return -1;
+    }
+    if((sign(registers[rs] - registers[rt])>0 && registers[rs] < registers[rt]) || (sign(registers[rs] - registers[rt])<0 && registers[rs] > registers[rt])){
+        registers[rd] = registers[rs] - registers[rt];
+        return -1;
+    }
+    registers[rd] = registers[rs] - registers[rt];
     return 1;
 }
 void And(int rs,int rt,int rd){
@@ -533,14 +555,16 @@ int main () {
         decode(Im[i]);
         if(error() != 0){
             if(error_w0 == 1)fprintf(edp, "In cycle %d: Write $0 Error\n", cycle);
-            if(error_ao == 1)fprintf(edp, "In cycle %d: Address Overflow\n", cycle);
+            if(error_ao == 1){
+                fprintf(edp, "In cycle %d: Address Overflow\n", cycle);
+                end = 1;
+            }
             if(error_dm == 1){
                 fprintf(edp, "In cycle %d: Misalignment Error\n", cycle);
                 end = 1;
             }
             if(error_no == 1){
                 fprintf(edp, "In cycle %d: Number Overflow\n", cycle);
-                end = 1;
             }
             error_w0 = 0;
             error_ao = 0;
